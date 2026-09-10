@@ -138,6 +138,33 @@ docker compose logs -f web
 docker compose down
 ```
 
+### VS Code Dev Container and Debugging
+
+1. Install Docker, Docker Compose and an updated VS Code Desktop with the
+   **Dev Containers** extension (`ms-vscode-remote.remote-containers`).
+2. Open the project and run **Dev Containers: Reopen in Container** from the
+   command palette (`Ctrl+Shift+P`).
+3. Wait for the container and extensions to finish starting. Vite starts
+   automatically on port `8080`.
+4. Set a breakpoint in a `.tsx` or `.ts` file, select
+   **React: debug no navegador integrado** in Run and Debug, then press **F5**.
+   Interact with the page to execute the code containing the breakpoint.
+
+The debugger uses VS Code's integrated browser (`editor-browser`), so use a
+recent VS Code version that supports it. Stopping debugging closes the browser
+session; Vite keeps running in the container.
+
+Container Tools, Codex and ESLint are configured for installation.
+Git is installed in the container. Use VS Code's built-in Source Control panel
+(`Ctrl+Shift+G`) to stage changes, commit and push without using the terminal.
+Sign in through the Codex extension after opening the container. Container
+management on the host uses the locally installed Container Tools extension;
+the Docker socket is not mounted into the development container.
+
+If an older container already exists, run `docker compose down` before the
+first reopen. After dependency changes, run the rebuild command with
+`--renew-anon-volumes` above, then reopen the container.
+
 ## 📱 Sections
 
 ### 🏠 Hero

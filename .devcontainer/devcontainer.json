@@ -1,0 +1,25 @@
+{
+  "name": "JeanDevBR - React",
+  "dockerComposeFile": "../docker-compose.yml",
+  "service": "web",
+  "workspaceFolder": "/app",
+  "remoteUser": "node",
+  "overrideCommand": false,
+  "shutdownAction": "stopCompose",
+  "forwardPorts": [8080],
+  "portsAttributes": {
+    "8080": {
+      "label": "Vite",
+      "onAutoForward": "notify"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-azuretools.vscode-containers",
+        "openai.chatgpt",
+        "dbaeumer.vscode-eslint"
+      ]
+    }
+  }
+}

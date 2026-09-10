@@ -1,11 +1,17 @@
-FROM node:22-alpine
+FROM node:22-bookworm-slim
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends git openssh-client ca-certificates procps \
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
+RUN chown node:node /app
+USER node
 
-COPY package.json package-lock.json ./
+COPY --chown=node:node package.json package-lock.json ./
 RUN npm ci
 
-COPY . .
+COPY --chown=node:node . .
 
 EXPOSE 8080
 
