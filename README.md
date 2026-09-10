@@ -105,6 +105,39 @@ npm run build
 
 The built files will be in the `dist/` directory.
 
+### Local Development with Docker
+
+Requires Docker and Docker Compose. From the project root:
+
+```bash
+docker compose up -d --build
+```
+
+Open `http://localhost:8080`. The container runs the Vite development server.
+The source code is mounted into the container, so edits update the site
+automatically. Container dependencies are isolated from local `node_modules`.
+Production deployment remains handled by Vercel.
+
+After changing `package.json` or `package-lock.json`, rebuild the image and
+renew the anonymous dependency volume:
+
+```bash
+docker compose up -d --build --renew-anon-volumes
+```
+
+To use another host port:
+
+```bash
+PORT=3000 docker compose up -d --build
+```
+
+View logs or stop the container:
+
+```bash
+docker compose logs -f web
+docker compose down
+```
+
 ## 📱 Sections
 
 ### 🏠 Hero
