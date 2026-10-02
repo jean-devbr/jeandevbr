@@ -37,16 +37,32 @@ class ProjectPage extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          project.category.toUpperCase(),
-                          style: const TextStyle(
-                            color: PortfolioColors.cyan,
-                            letterSpacing: 2,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 12,
+                        if (project.imagePath case final imagePath?) ...[
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(18),
+                            child: AspectRatio(
+                              aspectRatio: 16 / 7,
+                              child: Image.asset(
+                                imagePath,
+                                width: double.infinity,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 16),
+                          const SizedBox(height: 32),
+                        ],
+                        if (project.category.isNotEmpty) ...[
+                          Text(
+                            project.category.toUpperCase(),
+                            style: const TextStyle(
+                              color: PortfolioColors.cyan,
+                              letterSpacing: 2,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 12,
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                        ],
                         Text(
                           project.title,
                           style: const TextStyle(
@@ -90,11 +106,12 @@ class ProjectPage extends StatelessWidget {
                                 primary: true,
                                 onPressed: () => _openUrl(demo),
                               ),
-                            _ProjectAction(
-                              label: 'Ver código no GitHub',
-                              icon: Icons.code_rounded,
-                              onPressed: () => _openUrl(project!.githubUrl),
-                            ),
+                            if (project.githubUrl case final github?)
+                              _ProjectAction(
+                                label: 'Ver código no GitHub',
+                                icon: Icons.code_rounded,
+                                onPressed: () => _openUrl(github),
+                              ),
                           ],
                         ),
                         const SizedBox(height: 54),

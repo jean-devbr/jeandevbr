@@ -24,29 +24,36 @@ class ProjectsSection extends StatelessWidget {
           style: TextStyle(color: PortfolioColors.muted, fontSize: 16),
         ),
         const SizedBox(height: 38),
-        LayoutBuilder(
-          builder: (context, constraints) {
-            final columns = constraints.maxWidth >= 850
-                ? 3
-                : constraints.maxWidth >= 560
-                ? 2
-                : 1;
-            const gap = 18.0;
-            final width =
-                (constraints.maxWidth - gap * (columns - 1)) / columns;
-            return Wrap(
-              spacing: gap,
-              runSpacing: gap,
-              children: [
-                for (final project in PortfolioProject.items)
-                  SizedBox(
-                    width: width,
-                    child: _ProjectCard(project: project),
-                  ),
-              ],
-            );
-          },
-        ),
+        if (PortfolioProject.items.isEmpty)
+          const Text(
+            'Novos projetos em breve.',
+            textAlign: TextAlign.center,
+            style: TextStyle(color: PortfolioColors.muted, fontSize: 15),
+          )
+        else
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final columns = constraints.maxWidth >= 850
+                  ? 3
+                  : constraints.maxWidth >= 560
+                  ? 2
+                  : 1;
+              const gap = 18.0;
+              final width =
+                  (constraints.maxWidth - gap * (columns - 1)) / columns;
+              return Wrap(
+                spacing: gap,
+                runSpacing: gap,
+                children: [
+                  for (final project in PortfolioProject.items)
+                    SizedBox(
+                      width: width,
+                      child: _ProjectCard(project: project),
+                    ),
+                ],
+              );
+            },
+          ),
       ],
     ),
   );
@@ -89,33 +96,37 @@ class _ProjectCard extends StatelessWidget {
               ),
               child: Stack(
                 children: [
-                  Positioned(
-                    right: -15,
-                    top: -50,
-                    child: Container(
-                      width: 170,
-                      height: 170,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: PortfolioColors.cyan.withValues(alpha: 0.08),
+                  if (project.imagePath case final imagePath?)
+                    Positioned.fill(
+                      child: Image.asset(imagePath, fit: BoxFit.cover),
+                    ),
+                  if (project.imagePath != null)
+                    Positioned.fill(
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              Colors.black.withValues(alpha: 0.18),
+                              Colors.transparent,
+                              Colors.black.withValues(alpha: 0.28),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                  Positioned(
-                    left: 23,
-                    top: 22,
-                    child: PortfolioTechPill(label: project.category),
-                  ),
-                  Center(
-                    child: Text(
-                      project.icon,
-                      style: TextStyle(
-                        fontSize: 48,
-                        fontWeight: FontWeight.w800,
-                        color: PortfolioColors.cyan.withValues(alpha: 0.58),
+                  if (project.imagePath == null)
+                    Center(
+                      child: Text(
+                        project.icon,
+                        style: TextStyle(
+                          fontSize: 48,
+                          fontWeight: FontWeight.w800,
+                          color: PortfolioColors.cyan.withValues(alpha: 0.58),
+                        ),
                       ),
                     ),
-                  ),
                   const Positioned(
                     right: 22,
                     bottom: 17,
