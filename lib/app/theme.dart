@@ -21,11 +21,20 @@ final portfolioTheme = ThemeData(
     onPrimary: PortfolioColors.background,
     onSurface: PortfolioColors.text,
   ),
-  fontFamily: 'Arial',
+  fontFamily: 'Work Sans',
   textTheme: const TextTheme(
-    bodyLarge: TextStyle(color: PortfolioColors.muted, height: 1.7),
-    bodyMedium: TextStyle(color: PortfolioColors.muted, height: 1.65),
+    bodyLarge: TextStyle(
+      fontFamily: 'Work Sans',
+      color: PortfolioColors.muted,
+      height: 1.7,
+    ),
+    bodyMedium: TextStyle(
+      fontFamily: 'Work Sans',
+      color: PortfolioColors.muted,
+      height: 1.65,
+    ),
     titleLarge: TextStyle(
+      fontFamily: 'Antic Didone',
       color: PortfolioColors.text,
       fontWeight: FontWeight.w700,
     ),

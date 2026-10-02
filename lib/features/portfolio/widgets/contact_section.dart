@@ -35,6 +35,7 @@ class ContactSection extends StatelessWidget {
               const Text(
                 'Vamos construir\nalgo juntos?',
                 style: TextStyle(
+                  fontFamily: 'Antic Didone',
                   color: PortfolioColors.text,
                   fontSize: 38,
                   height: 1.15,

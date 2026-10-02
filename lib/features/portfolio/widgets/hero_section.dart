@@ -27,6 +27,7 @@ class HeroSection extends StatelessWidget {
             Text.rich(
               TextSpan(
                 style: TextStyle(
+                  fontFamily: 'Antic Didone',
                   fontSize: narrow ? 48 : 70,
                   height: 1.05,
                   fontWeight: FontWeight.w800,

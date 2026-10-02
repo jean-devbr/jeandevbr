@@ -63,6 +63,7 @@ class PortfolioSectionTitle extends StatelessWidget {
     ),
     textAlign: centered ? TextAlign.center : TextAlign.start,
     style: const TextStyle(
+      fontFamily: 'Antic Didone',
       fontWeight: FontWeight.w800,
       fontSize: 34,
       letterSpacing: -1,
