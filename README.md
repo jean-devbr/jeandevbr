@@ -679,77 +679,14 @@ Metas (Core Web Vitals "bons"): **LCP ≤ 2,5 s · INP < 200 ms · CLS < 0,1**.
 
 ## 14. Deploy na Vercel
 
-A Vercel não tem Flutter por padrão, então o build roda no GitHub Actions e a pasta pronta é publicada.
+O projeto já inclui `vercel.json` e `tool/vercel_build.sh`. Ao importar o repositório na Vercel, deixe as configurações de build padrão detectadas pelo arquivo: o script instala o Flutter stable, resolve as dependências e gera `build/web`. A Vercel publica essa pasta e encaminha rotas desconhecidas para o app Flutter.
 
-// vercel.json  (colocado dentro de build/web antes do deploy)
+1. Envie este projeto para um repositório GitHub, GitLab ou Bitbucket.
+2. Na Vercel, selecione **Add New → Project** e importe o repositório.
+3. Mantenha a raiz do projeto como **Root Directory** e os campos de build definidos pelo `vercel.json`.
+4. Clique em **Deploy**. Os próximos pushes na branch de produção iniciam novos deploys automaticamente.
 
-{
-
-  "cleanUrls": true,
-
-  "trailingSlash": false,
-
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }],
-
-  "headers": [
-
-    {
-
-      "source": "/(assets|canvaskit)/(.*)",
-
-      "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
-
-    }
-
-  ]
-
-}
-
-A Vercel serve arquivos existentes antes de aplicar `rewrites`, então `/projetos/projeto-a/index.html` gerado pelo script é entregue diretamente; rotas desconhecidas caem no `index.html` e o `go_router` mostra a página 404.
-
-```yaml
-# .github/workflows/deploy.yml
-
-name: Deploy
-
-on:
-
-  push:
-
-    branches: [main]
-
-jobs:
-
-  deploy:
-
-    runs-on: ubuntu-latest
-
-    steps:
-
-      - uses: actions/checkout@v4
-
-      - uses: subosito/flutter-action@v2
-
-        with: { channel: stable, cache: true }
-
-      - run: flutter pub get
-
-      - run: flutter test
-
-      - run: flutter build web --wasm --release
-
-      - run: dart run tool/build_seo.dart --base-url=https://jeandevbr.vercel.app
-
-      - run: cp vercel.json build/web/
-
-      - run: npx vercel deploy build/web --prod --yes --token=${{ secrets.VERCEL_TOKEN }}
-
-        env:
-
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-```
+O primeiro build baixa o Flutter SDK e pode levar mais tempo. As fontes Work Sans e Antic Didone são carregadas pelo Google Fonts no navegador.
 
 ---
 
