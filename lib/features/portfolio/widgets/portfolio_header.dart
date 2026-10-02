@@ -85,7 +85,8 @@ class _NavText extends StatelessWidget {
     onPressed: onPressed,
     style: TextButton.styleFrom(
       foregroundColor: PortfolioColors.muted,
-      textStyle: const TextStyle(fontSize: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+      textStyle: const TextStyle(fontSize: 18),
     ),
     child: Text(label),
   );

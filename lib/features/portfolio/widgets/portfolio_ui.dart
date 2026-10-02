@@ -221,7 +221,8 @@ class PortfolioOutlineButton extends StatelessWidget {
     style: OutlinedButton.styleFrom(
       foregroundColor: PortfolioColors.cyan,
       side: const BorderSide(color: PortfolioColors.cyan),
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 14),
+      padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 18),
+      textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
     ),
     child: Text(label),
   );
