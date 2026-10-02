@@ -3,8 +3,12 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    working_dir: /workspace
     ports:
       - "127.0.0.1:${PORT:-8080}:8080"
     volumes:
-      - .:/app
-      - /app/node_modules
+      - .:/workspace
+      - flutter_pub_cache:/root/.pub-cache
+
+volumes:
+  flutter_pub_cache:

@@ -2,11 +2,18 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "React: debug no navegador integrado",
-      "type": "editor-browser",
+      "name": "Flutter Web: Debug",
+      "type": "dart",
       "request": "launch",
-      "url": "http://localhost:8080",
-      "webRoot": "${workspaceFolder}"
+      "program": "lib/main.dart",
+      "deviceId": "web-server",
+      "flutterMode": "debug",
+      "toolArgs": [
+        "--web-hostname",
+        "0.0.0.0",
+        "--web-port",
+        "8080"
+      ]
     }
   ]
 }

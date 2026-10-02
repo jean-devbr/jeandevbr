@@ -1,6 +1,6 @@
 # Jean Costa — Portfólio Front-End (Flutter Web)
 
-> Portfólio orientado a **evidências**: cada projeto mostra como a interface foi pensada, construída e validada: design, componentes, estado, acessibilidade e performance. Produção: [https\://jeandevbr.vercel.app](https://jeandevbr.vercel.app)
+> Portfólio orientado a **evidências**: cada projeto mostra como a interface foi pensada, construída e validada: design, componentes, estado, acessibilidade e performance. Produção: [https://jeandevbr.vercel.app](https://jeandevbr.vercel.app)
 
 Jean constrói interfaces de qualidade → aqui estão os projetos → aqui está como foram construídos
 
@@ -10,29 +10,31 @@ Essa narrativa orienta todas as decisões de layout e conteúdo deste repositór
 
 ---
 
+> **Status da migração:** a primeira versão funcional do portfólio já está em Flutter Web. As seções de arquitetura, SEO e deploy abaixo descrevem a evolução planejada.
+
 ## Sumário
 
-1. [Objetivo do redesign](#1-objetivo-do-redesign)  
-2. [Por que Flutter — e o cuidado com SEO](#2-por-que-flutter--e-o-cuidado-com-seo)  
-3. [Stack](#3-stack)  
-4. [Como rodar](#4-como-rodar)  
-5. [Estrutura de pastas](#5-estrutura-de-pastas)  
-6. [Rotas](#6-rotas)  
-7. [Conteúdo e modelo de conteúdo](#7-conteúdo-e-modelo-de-conteúdo)  
-8. [Design system](#8-design-system)  
-9. [Componentes](#9-componentes)  
-10. [Projetos privados](#10-projetos-privados)  
-11. [Camada de SEO estático](#11-camada-de-seo-estático)  
-12. [Acessibilidade](#12-acessibilidade)  
-13. [Performance](#13-performance)  
-14. [Deploy na Vercel](#14-deploy-na-vercel)  
-15. [Analytics](#15-analytics)  
-16. [Roadmap](#16-roadmap)  
+1. [Objetivo do redesign](#1-objetivo-do-redesign)
+2. [Por que Flutter — e o cuidado com SEO](#2-por-que-flutter--e-o-cuidado-com-seo)
+3. [Stack](#3-stack)
+4. [Como rodar](#4-como-rodar)
+5. [Estrutura de pastas](#5-estrutura-de-pastas)
+6. [Rotas](#6-rotas)
+7. [Conteúdo e modelo de conteúdo](#7-conteúdo-e-modelo-de-conteúdo)
+8. [Design system](#8-design-system)
+9. [Componentes](#9-componentes)
+10. [Projetos privados](#10-projetos-privados)
+11. [Camada de SEO estático](#11-camada-de-seo-estático)
+12. [Acessibilidade](#12-acessibilidade)
+13. [Performance](#13-performance)
+14. [Deploy na Vercel](#14-deploy-na-vercel)
+15. [Analytics](#15-analytics)
+16. [Roadmap](#16-roadmap)
 17. [Checklist de QA](#17-checklist-de-qa)
 
 ---
 
-## 1\. Objetivo do redesign
+## 1. Objetivo do redesign
 
 Sair de uma página genérica de "Desenvolvedor" para uma **coleção de estudos de caso**:
 
@@ -40,8 +42,8 @@ Sair de uma página genérica de "Desenvolvedor" para uma **coleção de estudos
 | :---- | :---- |
 | Uma página única com tudo | Home → Projetos → Projeto individual (URL própria) |
 | Nuvem de logos de tecnologias | Stack front-end agrupada por área (UI, estado, estilo, testes) |
-| Projetos privados omitidos ou com botão "Demo" morto | Badge "Projeto privado" \+ escada de evidências |
-| Conteúdo invisível para crawlers | HTML estático por rota \+ Flutter por cima |
+| Projetos privados omitidos ou com botão "Demo" morto | Badge "Projeto privado" + escada de evidências |
+| Conteúdo invisível para crawlers | HTML estático por rota + Flutter por cima |
 
 **Regra de curadoria:** só entra na seção principal o projeto que demonstra qualidade real de interface — responsividade, acessibilidade, performance e componentização. Projetos menores ou experimentais continuam no GitHub.
 
@@ -49,13 +51,13 @@ Sair de uma página genérica de "Desenvolvedor" para uma **coleção de estudos
 
 ---
 
-## 2\. Por que Flutter — e o cuidado com SEO
+## 2. Por que Flutter — e o cuidado com SEO
 
 Flutter Web desenha a interface em `<canvas>` (CanvasKit/Skwasm). Isso traz fidelidade visual e reaproveitamento de código, mas **o texto não fica no HTML** — crawlers e previews de link (LinkedIn, WhatsApp) veem uma página vazia. A auditoria do site atual encontrou exatamente esse sintoma: o `<title>` responde, mas o corpo não tem conteúdo extraível.
 
 Por isso este projeto usa uma arquitetura em **duas camadas**, ambas alimentadas pelo **mesmo JSON de conteúdo**:
 
-assets/content/\*.json
+assets/content/*.json
 
         │
 
@@ -63,7 +65,7 @@ assets/content/\*.json
 
         │
 
-        └──► tool/build\_seo.dart  ──► build/web/projetos/\<slug\>/index.html
+        └──► tool/build_seo.dart  ──► build/web/projetos/<slug>/index.html
 
                                       (title, description, OG, canonical,
 
@@ -71,65 +73,56 @@ assets/content/\*.json
 
 Assim cada URL entrega HTML real no primeiro byte e o Flutter carrega em seguida. Como o conteúdo vem da mesma fonte, o HTML e a UI nunca divergem (requisito do Google para structured data e conteúdo visível).
 
-> Alternativa considerada: Next.js \+ TypeScript (recomendação original da auditoria). Flutter foi escolhido para demonstrar domínio da stack; a camada estática compensa a principal fraqueza dele na web.
+> Alternativa considerada: Next.js + TypeScript (recomendação original da auditoria). Flutter foi escolhido para demonstrar domínio da stack; a camada estática compensa a principal fraqueza dele na web.
 
 ---
 
-## 3\. Stack
+## 3. Stack
 
-| Camada | Escolha |
+| Camada | Implementação |
 | :---- | :---- |
 | UI | Flutter 3.x (stable), Dart 3, Material 3 com tema próprio |
-| Rotas | `go_router` \+ `usePathUrlStrategy()` (URLs sem `#`) |
-| Estado | `flutter_riverpod` (simples, testável) |
-| Conteúdo | JSON em `assets/content/` (sem CMS no MVP) |
-| Tipografia | `google_fonts` (Inter \+ JetBrains Mono) ou fontes empacotadas |
+| Rotas | `go_router` + `usePathUrlStrategy()` (URLs sem `#`) |
+| Estado | Estado local dos widgets; navegação e URLs gerenciadas pelo `go_router` |
+| Conteúdo | Dados tipados em Dart em `lib/models/project.dart` |
+| Tipografia | Fonte de sistema com fallback do navegador |
 | Links externos | `url_launcher` |
-| Vídeo | `video_player` carregado sob demanda |
-| SEO | Script Dart em `tool/` gerando HTML estático \+ `sitemap.xml` |
-| Build | `flutter build web --wasm --release` |
-| Deploy | Vercel (build em GitHub Actions) |
-| Testes | `flutter_test`, golden tests de componentes, `integration_test` |
+| Vídeo | Planejado para cases que tenham demonstração gravada |
+| SEO | Metadados iniciais em `web/index.html`; geração por rota planejada |
+| Build | `flutter build web --release` |
+| Deploy | Vercel; automação de build e deploy ainda planejada |
+| Testes | Flutter Test (cobertura automatizada ainda planejada) |
 
 ---
 
-## 4\. Como rodar
+## 4. Como rodar
 
-\# dependências
+O projeto usa Dev Containers como ambiente de desenvolvimento. Instale Docker, VS Code e a extensão **Dev Containers** (`ms-vscode-remote.remote-containers`).
 
-flutter pub get
+1. Abra a pasta do projeto no VS Code.
+2. Pressione F1 e selecione **Dev Containers: Reopen in Container**.
+3. Aguarde o Flutter instalar as dependências.
+4. No VS Code, escolha **Flutter Web: Debug** na aba Run and Debug e pressione F5.
+5. Abra `http://localhost:8080`.
 
-\# desenvolvimento
-
-flutter run \-d chrome
-
-\# testes
-
-flutter test
-
-\# build de produção \+ camada SEO
-
-flutter build web \--wasm \--release
-
-dart run tool/build\_seo.dart \--base-url=https\://jeandevbr.vercel.app
-
-\# servir localmente o resultado final
-
-cd build/web && python3 \-m http.server 8080
+A configuração inicia `lib/main.dart` no dispositivo `web-server`, escutando na porta 8080 do container.
 
 ---
 
-## 5\. Estrutura de pastas
+## 5. Estrutura de pastas
 
+Estrutura planejada para a aplicação Flutter:
+
+```
 .
 
 ├── assets/
 
 │   ├── content/
 
-│   │   ├── profile.json           \# nome, headline, links, CV
+│   │   ├── profile.json           # nome, headline, links, CV
 
-│   │   ├── experience.json        \# posições \+ projetos relacionados
+│   │   ├── experience.json        # posições + projetos relacionados
 
 │   │   └── projects/
 
@@ -149,7 +142,7 @@ cd build/web && python3 \-m http.server 8080
 
 │           ├── poster.webp
 
-│           └── og.png             \# 1200×630
+│           └── og.png             # 1200×630
 
 ├── lib/
 
@@ -161,23 +154,23 @@ cd build/web && python3 \-m http.server 8080
 
 │   │   └── theme/
 
-│   │       ├── tokens.dart        \# cores, espaçamento, raios
+│   │       ├── tokens.dart        # cores, espaçamento, raios
 
 │   │       ├── typography.dart
 
-│   │       └── app\_theme.dart
+│   │       └── app_theme.dart
 
 │   ├── data/
 
-│   │   ├── models/                \# Project, Experience, Profile
+│   │   ├── models/                # Project, Experience, Profile
 
-│   │   └── content\_repository.dart
+│   │   └── content_repository.dart
 
 │   ├── features/
 
 │   │   ├── home/
 
-│   │   ├── projects/              \# lista \+ página do case
+│   │   ├── projects/              # lista + página do case
 
 │   │   ├── experience/
 
@@ -187,17 +180,17 @@ cd build/web && python3 \-m http.server 8080
 
 │   └── shared/
 
-│       ├── layout/                \# AppShell, header, footer, skip link
+│       ├── layout/                # AppShell, header, footer, skip link
 
-│       └── widgets/               \# ProjectCard, TechBadge, EvidenceStrip…
+│       └── widgets/               # ProjectCard, TechBadge, EvidenceStrip…
 
 ├── tool/
 
-│   └── build\_seo.dart             \# gera HTML estático, sitemap e robots
+│   └── build_seo.dart             # gera HTML estático, sitemap e robots
 
 ├── web/
 
-│   ├── index.html                 \# meta padrão \+ \<noscript\> com conteúdo
+│   ├── index.html                 # meta padrão + <noscript> com conteúdo
 
 │   ├── manifest.json
 
@@ -205,38 +198,40 @@ cd build/web && python3 \-m http.server 8080
 
 ├── test/
 
-├── integration\_test/
+├── integration_test/
 
 └── vercel.json
+```
 
 ---
 
-## 6\. Rotas
+## 6. Rotas
 
 | Rota | Página | Title |
 | :---- | :---- | :---- |
 | `/` | Home | Jean Costa — Desenvolvedor Front-End | Projetos e experiência |
-| `/projetos` | Lista de cases | Projetos Front-End | Jean Costa |
+| `/projetos` | Lista de cases (planejada) | Projetos Front-End | Jean Costa |
 | `/projetos/:slug` | Case individual | `{Projeto}` — Case Front-End | Jean Costa |
 | `/experiencia` | Experiência | Experiência Profissional | Jean Costa |
 | `/sobre` | Sobre | Sobre Jean Costa — Desenvolvedor Front-End |
 | `/contato` | Contato | Contato | Jean Costa |
 
+```dart
 // lib/main.dart
 
 import 'package:flutter/material.dart';
 
-import 'package:flutter\_web\_plugins/url\_strategy.dart';
+import 'package:flutter_web_plugins/url_strategy.dart';
 
-import 'package:flutter\_riverpod/flutter\_riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'app/router.dart';
 
-import 'app/theme/app\_theme.dart';
+import 'app/theme/app_theme.dart';
 
 void main() {
 
-  usePathUrlStrategy(); // /projetos/x em vez de /\#/projetos/x
+  usePathUrlStrategy(); // /projetos/x em vez de /#/projetos/x
 
   runApp(const ProviderScope(child: PortfolioApp()));
 
@@ -248,7 +243,7 @@ class PortfolioApp extends StatelessWidget {
 
   @override
 
-  Widget build(BuildContext context) \=\> MaterialApp.router(
+  Widget build(BuildContext context) => MaterialApp.router(
 
         title: 'Jean Costa — Desenvolvedor Front-End',
 
@@ -264,66 +259,69 @@ class PortfolioApp extends StatelessWidget {
 
 // lib/app/router.dart
 
-final appRouter \= GoRouter(
+final appRouter = GoRouter(
 
-  routes: \[
+  routes: [
 
     ShellRoute(
 
-      builder: (context, state, child) \=\> AppShell(child: child),
+      builder: (context, state, child) => AppShell(child: child),
 
-      routes: \[
+      routes: [
 
-        GoRoute(path: '/', builder: (\_, \_\_) \=\> const HomePage()),
+        GoRoute(path: '/', builder: (_, __) => const HomePage()),
 
         GoRoute(
 
           path: '/projetos',
 
-          builder: (\_, state) \=\> ProjectsPage(
+          builder: (_, state) => ProjectsPage(
 
-            stackFilter: state.uri.queryParameters\['stack'\], // filtro compartilhável
+            stackFilter: state.uri.queryParameters['stack'], // filtro compartilhável
 
           ),
 
-          routes: \[
+          routes: [
 
             GoRoute(
 
               path: ':slug',
 
-              builder: (\_, state) \=\> ProjectPage(slug: state.pathParameters\['slug'\]\!),
+              builder: (_, state) => ProjectPage(slug: state.pathParameters['slug']!),
 
             ),
 
-          \],
+          ],
 
         ),
 
-        GoRoute(path: '/experiencia', builder: (\_, \_\_) \=\> const ExperiencePage()),
+        GoRoute(path: '/experiencia', builder: (_, __) => const ExperiencePage()),
 
-        GoRoute(path: '/sobre', builder: (\_, \_\_) \=\> const AboutPage()),
+        GoRoute(path: '/sobre', builder: (_, __) => const AboutPage()),
 
-        GoRoute(path: '/contato', builder: (\_, \_\_) \=\> const ContactPage()),
+        GoRoute(path: '/contato', builder: (_, __) => const ContactPage()),
 
-      \],
+      ],
 
     ),
 
-  \],
+  ],
 
-  errorBuilder: (\_, \_\_) \=\> const NotFoundPage(),
+  errorBuilder: (_, __) => const NotFoundPage(),
 
 );
+
+```
 
 Para atualizar o título da aba ao navegar, envolva cada página em `Title(title: ..., color: ..., child: ...)`. (Isso não substitui a camada estática: crawlers leem o HTML inicial.)
 
 ---
 
-## 7\. Conteúdo e modelo de conteúdo
+## 7. Conteúdo e modelo de conteúdo
 
 Todo projeto segue o mesmo modelo editorial. "Não aplicável" é melhor que inventar uma evidência.
 
+```json
 // assets/content/projects/projeto-a.json
 
 {
@@ -348,13 +346,13 @@ Todo projeto segue o mesmo modelo editorial. "Não aplicável" é melhor que inv
 
   "stack": {
 
-    "ui": \["Flutter", "Material 3"\],
+    "ui": ["Flutter", "Material 3"],
 
-    "state": \["Riverpod"\],
+    "state": ["Riverpod"],
 
-    "testing": \["flutter\_test", "golden tests"\],
+    "testing": ["flutter_test", "golden tests"],
 
-    "tooling": \["GitHub Actions", "Vercel"\]
+    "tooling": ["GitHub Actions", "Vercel"]
 
   },
 
@@ -362,7 +360,7 @@ Todo projeto segue o mesmo modelo editorial. "Não aplicável" é melhor que inv
 
     "responsive": true, "accessibility": true, "tests": true, "performance": true, "deploy": true,
 
-    "screenshots": \["01-dashboard-overview.webp", "02-create-operation.webp"\],
+    "screenshots": ["01-dashboard-overview.webp", "02-create-operation.webp"],
 
     "video": "demo.mp4",
 
@@ -407,7 +405,9 @@ Todo projeto segue o mesmo modelo editorial. "Não aplicável" é melhor que inv
   }
 
 }
+```
 
+```dart
 // lib/data/models/project.dart
 
 enum ProjectVisibility { public, private, demoOnly }
@@ -428,111 +428,115 @@ class Project {
 
   final Confidentiality? confidentiality;
 
-  final Map\<String, String\> sections;
+  final Map<String, String> sections;
 
   const Project({...});
 
-  factory Project.fromJson(Map\<String, dynamic\> j) \=\> Project(
+  factory Project.fromJson(Map<String, dynamic> j) => Project(
 
-        slug: j\['slug'\],
+        slug: j['slug'],
 
-        title: j\['title'\],
+        title: j['title'],
 
-        summary: j\['summary'\],
+        summary: j['summary'],
 
-        period: j\['period'\],
+        period: j['period'],
 
-        role: j\['role'\],
+        role: j['role'],
 
-        visibility: switch (j\['visibility'\]) {
+        visibility: switch (j['visibility']) {
 
-          'private' \=\> ProjectVisibility.private,
+          'private' => ProjectVisibility.private,
 
-          'demo-only' \=\> ProjectVisibility.demoOnly,
+          'demo-only' => ProjectVisibility.demoOnly,
 
-          \_ \=\> ProjectVisibility.public,
+          _ => ProjectVisibility.public,
 
         },
 
-        featured: j\['featured'\] ?? false,
+        featured: j['featured'] ?? false,
 
-        stack: ProjectStack.fromJson(j\['stack'\]),
+        stack: ProjectStack.fromJson(j['stack']),
 
-        evidence: ProjectEvidence.fromJson(j\['evidence'\]),
+        evidence: ProjectEvidence.fromJson(j['evidence']),
 
-        links: ProjectLinks.fromJson(j\['links'\] ?? const {}),
+        links: ProjectLinks.fromJson(j['links'] ?? const {}),
 
-        confidentiality: j\['confidentiality'\] \== null
+        confidentiality: j['confidentiality'] == null
 
             ? null
 
-            : Confidentiality.fromJson(j\['confidentiality'\]),
+            : Confidentiality.fromJson(j['confidentiality']),
 
-        sections: Map\<String, String\>.from(j\['sections'\] ?? const {}),
+        sections: Map<String, String>.from(j['sections'] ?? const {}),
 
       );
 
 }
 
-> Dica: gere `fromJson`/`toJson` com `freezed` \+ `json_serializable` quando o modelo estabilizar.
+```
+
+> Dica: gere `fromJson`/`toJson` com `freezed` + `json_serializable` quando o modelo estabilizar.
 
 ### Estrutura da página do case
 
-Breadcrumb → H1 \+ one-liner → badges (tipo, visibilidade, período) → meu papel → stack por camada → ações (só as que existem) → **Contexto** → **Solução** → **Minha responsabilidade** → **Arquitetura de componentes** → **Fluxo de interação** (tela → ação → feedback) → **Decisões técnicas** (2–3) → **Evidências** → **Qualidade** → **Resultado** (métricas só se defensáveis) → **O que eu faria diferente** → **Privacidade** → próximo case.
+Breadcrumb → H1 + one-liner → badges (tipo, visibilidade, período) → meu papel → stack por camada → ações (só as que existem) → **Contexto** → **Solução** → **Minha responsabilidade** → **Arquitetura de componentes** → **Fluxo de interação** (tela → ação → feedback) → **Decisões técnicas** (2–3) → **Evidências** → **Qualidade** → **Resultado** (métricas só se defensáveis) → **O que eu faria diferente** → **Privacidade** → próximo case.
 
 ---
 
-## 8\. Design system
+## 8. Design system
 
 Direção: **85–90% editorial/profissional, 10–15% identidade "dev"** (monospace em labels, pequenos diagramas, trechos de código). Nada de imitar o VS Code inteiro.
 
+```dart
 // lib/app/theme/tokens.dart
 
 abstract final class Space {      // escala 4/8
 
-  static const xs \= 4.0, sm \= 8.0, md \= 16.0, lg \= 24.0, xl \= 32.0, xxl \= 48.0, xxxl \= 64.0;
+  static const xs = 4.0, sm = 8.0, md = 16.0, lg = 24.0, xl = 32.0, xxl = 48.0, xxxl = 64.0;
 
 }
 
 abstract final class Radii {
 
-  static const sm \= 6.0, md \= 10.0;   // moderado; evitar "card flutuante" em tudo
+  static const sm = 6.0, md = 10.0;   // moderado; evitar "card flutuante" em tudo
 
 }
 
 abstract final class Breakpoints {
 
-  static const tablet \= 600.0;        // 2 colunas
+  static const tablet = 600.0;        // 2 colunas
 
-  static const desktop \= 1024.0;      // grid editorial
+  static const desktop = 1024.0;      // grid editorial
 
-  static const maxContent \= 1200.0;
+  static const maxContent = 1200.0;
 
-  static const maxText \= 720.0;       // \~60–75 caracteres por linha
+  static const maxText = 720.0;       // ~60–75 caracteres por linha
 
 }
+```
 
 | Token | Valor |
 | :---- | :---- |
 | Fonte principal | Inter |
 | Fonte técnica | JetBrains Mono (apenas snippets e labels) |
 | Corpo | 17–18 px desktop · 16–17 px mobile |
-| H1 | \~38 px (mobile) → \~72 px (desktop), interpolado pela largura |
-| Base | neutros \+ **uma** cor de destaque |
+| H1 | ~38 px (mobile) → ~72 px (desktop), interpolado pela largura |
+| Base | neutros + **uma** cor de destaque |
 | Semânticas | sucesso / alerta / privado — sempre com texto ou ícone, nunca só cor |
 
 Contraste validado contra WCAG 2.2 (mín. 4.5:1 para texto normal).
 
 ---
 
-## 9\. Componentes
+## 9. Componentes
 
 | Widget | Responsabilidade |
 | :---- | :---- |
-| `AppShell` | Header, skip link, `main`, footer; menu vira drawer \< 600 px |
-| `HeroSection` | Cargo \+ proposta de valor \+ CTA primário e secundário |
+| `AppShell` | Header, skip link, `main`, footer; menu vira drawer < 600 px |
+| `HeroSection` | Cargo + proposta de valor + CTA primário e secundário |
 | `ProjectCard` | Cover, nome, problema em uma frase, badges, papel, "Ver estudo de caso →" |
-| `TechBadgeGroup` | Badges agrupados por UI / Estado / Testes / Ferramentas (máx. \~8 por card) |
+| `TechBadgeGroup` | Badges agrupados por UI / Estado / Testes / Ferramentas (máx. ~8 por card) |
 | `EvidenceStrip` | ✓ Responsivo · ✓ Acessível · ✓ Testes · ✓ Performance · ✓ Deploy — só o que existe |
 | `ComponentDiagram` | Árvore de componentes/estado com `CustomPaint`; scroll horizontal no mobile |
 | `CodeSnippet` | Trecho curto de código em monospace, com botão copiar |
@@ -545,9 +549,10 @@ Hierarquia de CTA: **Primário** "Ver projetos front-end" · **Secundário** "Ex
 
 Grid responsivo:
 
+```dart
 LayoutBuilder(builder: (context, c) {
 
-  final cols \= c.maxWidth \>= Breakpoints.desktop ? 3 : c.maxWidth \>= Breakpoints.tablet ? 2 : 1;
+  final cols = c.maxWidth >= Breakpoints.desktop ? 3 : c.maxWidth >= Breakpoints.tablet ? 2 : 1;
 
   return Wrap(
 
@@ -555,27 +560,28 @@ LayoutBuilder(builder: (context, c) {
 
     runSpacing: Space.lg,
 
-    children: \[
+    children: [
 
       for (final p in projects)
 
         SizedBox(
 
-          width: (c.maxWidth \- Space.lg \* (cols \- 1)) / cols,
+          width: (c.maxWidth - Space.lg * (cols - 1)) / cols,
 
           child: ProjectCard(project: p),
 
         ),
 
-    \],
+    ],
 
   );
 
 });
+```
 
 ---
 
-## 10\. Projetos privados
+## 10. Projetos privados
 
 A ausência de URL pública não é deficiência; a ausência de **evidência** é.
 
@@ -591,43 +597,45 @@ Texto padrão no case:
 
 No card, em vez de um `[Live Demo]` desabilitado:
 
-\[🔒 Projeto privado\]   \[Ver estudo de caso\]  \[Ver evidências\]
+[🔒 Projeto privado]   [Ver estudo de caso]  [Ver evidências]
 
 ---
 
-## 11\. Camada de SEO estático
+## 11. Camada de SEO estático
 
 `tool/build_seo.dart` roda **depois** do `flutter build web` e, para cada rota:
 
-1. Copia `build/web/index.html` para `build/web/<rota>/index.html`.  
-2. Injeta `<title>`, `<meta name="description">`, `<link rel="canonical">`, Open Graph (`og:title`, `og:description`, `og:image` 1200×630, `og:url`) e Twitter Card.  
-3. Injeta JSON-LD: `ProfilePage`/`Person` na Home e Sobre, `BreadcrumbList` nos cases.  
-4. Insere o conteúdo do case em HTML semântico (`<main><article><h1>…</h1><section>…</section></article></main>`) dentro de `<div id="static-content">`.  
+1. Copia `build/web/index.html` para `build/web/<rota>/index.html`.
+2. Injeta `<title>`, `<meta name="description">`, `<link rel="canonical">`, Open Graph (`og:title`, `og:description`, `og:image` 1200×630, `og:url`) e Twitter Card.
+3. Injeta JSON-LD: `ProfilePage`/`Person` na Home e Sobre, `BreadcrumbList` nos cases.
+4. Insere o conteúdo do case em HTML semântico (`<main><article><h1>…</h1><section>…</section></article></main>`) dentro de `<div id="static-content">`.
 5. Gera `sitemap.xml` (todas as rotas públicas) e `robots.txt`.
 
-\<\!-- web/index.html (trecho) \--\>
+```html
+<!-- web/index.html (trecho) -->
 
-\<base href="/"\>
+<base href="/">
 
-\<div id="static-content"\>
+<div id="static-content">
 
-  \<\!-- preenchido pelo tool/build\_seo.dart \--\>
+  <!-- preenchido pelo tool/build_seo.dart -->
 
-\</div\>
+</div>
 
-\<script\>
+<script>
 
   // esconde o HTML estático quando o Flutter renderiza o primeiro frame
 
-  window.addEventListener('flutter-first-frame', () \=\> {
+  window.addEventListener('flutter-first-frame', () => {
 
     document.getElementById('static-content')?.remove();
 
   });
 
-\</script\>
+</script>
 
-\<script src="flutter\_bootstrap.js" async\>\</script\>
+<script src="flutter_bootstrap.js" async></script>
+```
 
 Use caminhos absolutos (`/flutter_bootstrap.js`, `/assets/...`) e `<base href="/">` para que as páginas em subpastas encontrem os arquivos do Flutter.
 
@@ -635,41 +643,41 @@ Validar após cada deploy: `curl -s https://jeandevbr.vercel.app/projetos/projet
 
 ---
 
-## 12\. Acessibilidade
+## 12. Acessibilidade
 
 Flutter Web gera uma árvore de acessibilidade separada do canvas. Garanta:
 
-- `SemanticsBinding.instance.ensureSemantics()` no `main()` (ativa a árvore para leitores de tela e testes).  
-- `Semantics(header: true)` nos títulos e hierarquia coerente (um H1 por página).  
-- Links reais com `Link` do `url_launcher` (permite abrir em nova aba, botão do meio, copiar link).  
-- Foco visível em cards e botões (`FocusableActionDetector` \+ borda/realce no estado `focused`, não só `hovered`).  
-- Ordem de tabulação lógica com `FocusTraversalGroup`.  
-- Skip link "Pular para o conteúdo" como primeiro foco.  
-- `PrivateProjectDialog` via `showDialog`: foco preso no dialog, fecha com `Esc`, foco devolvido ao gatilho.  
-- Respeitar `MediaQuery.disableAnimationsOf(context)` (equivalente a `prefers-reduced-motion`).  
-- Respeitar `textScaler` — layout não pode quebrar com texto a 200%.  
-- `semanticLabel` em screenshots informativos; `excludeFromSemantics: true` nos decorativos.  
-- Vídeos sem autoplay com áudio; legenda `.vtt` e transcrição.  
+- `SemanticsBinding.instance.ensureSemantics()` no `main()` (ativa a árvore para leitores de tela e testes).
+- `Semantics(header: true)` nos títulos e hierarquia coerente (um H1 por página).
+- Links reais com `Link` do `url_launcher` (permite abrir em nova aba, botão do meio, copiar link).
+- Foco visível em cards e botões (`FocusableActionDetector` + borda/realce no estado `focused`, não só `hovered`).
+- Ordem de tabulação lógica com `FocusTraversalGroup`.
+- Skip link "Pular para o conteúdo" como primeiro foco.
+- `PrivateProjectDialog` via `showDialog`: foco preso no dialog, fecha com `Esc`, foco devolvido ao gatilho.
+- Respeitar `MediaQuery.disableAnimationsOf(context)` (equivalente a `prefers-reduced-motion`).
+- Respeitar `textScaler` — layout não pode quebrar com texto a 200%.
+- `semanticLabel` em screenshots informativos; `excludeFromSemantics: true` nos decorativos.
+- Vídeos sem autoplay com áudio; legenda `.vtt` e transcrição.
 - Nada essencial depende de hover.
 
 ---
 
-## 13\. Performance
+## 13. Performance
 
-Metas (Core Web Vitals "bons"): **LCP ≤ 2,5 s · INP \< 200 ms · CLS \< 0,1**.
+Metas (Core Web Vitals "bons"): **LCP ≤ 2,5 s · INP < 200 ms · CLS < 0,1**.
 
-- `flutter build web --wasm` (Skwasm, com fallback automático para CanvasKit).  
-- O HTML estático da camada SEO faz o papel de "primeiro conteúdo" enquanto o Flutter carrega; mantenha-o leve.  
-- *Deferred imports* (`import '...' deferred as case_page;`) para páginas de case, vídeo e diagramas.  
-- Imagens em WebP, nas dimensões de exibição; `cacheWidth` em `Image.asset` para não decodificar maior que o necessário.  
-- Vídeo: só o `poster.webp` no primeiro paint; `video_player` inicializado ao clicar.  
-- Fontes: no máximo 2 famílias e 3–4 pesos; prefira empacotar em `assets/fonts` a baixar em runtime.  
-- Cache longo para `assets/` e `canvaskit/` no `vercel.json`.  
-- Medir com Lighthouse \+ Vercel Speed Insights (diagnóstico, não meta única).
+- `flutter build web --wasm` (Skwasm, com fallback automático para CanvasKit).
+- O HTML estático da camada SEO faz o papel de "primeiro conteúdo" enquanto o Flutter carrega; mantenha-o leve.
+- *Deferred imports* (`import '...' deferred as case_page;`) para páginas de case, vídeo e diagramas.
+- Imagens em WebP, nas dimensões de exibição; `cacheWidth` em `Image.asset` para não decodificar maior que o necessário.
+- Vídeo: só o `poster.webp` no primeiro paint; `video_player` inicializado ao clicar.
+- Fontes: no máximo 2 famílias e 3–4 pesos; prefira empacotar em `assets/fonts` a baixar em runtime.
+- Cache longo para `assets/` e `canvaskit/` no `vercel.json`.
+- Medir com Lighthouse + Vercel Speed Insights (diagnóstico, não meta única).
 
 ---
 
-## 14\. Deploy na Vercel
+## 14. Deploy na Vercel
 
 A Vercel não tem Flutter por padrão, então o build roda no GitHub Actions e a pasta pronta é publicada.
 
@@ -681,25 +689,26 @@ A Vercel não tem Flutter por padrão, então o build roda no GitHub Actions e a
 
   "trailingSlash": false,
 
-  "rewrites": \[{ "source": "/(.\*)", "destination": "/index.html" }\],
+  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }],
 
-  "headers": \[
+  "headers": [
 
     {
 
-      "source": "/(assets|canvaskit)/(.\*)",
+      "source": "/(assets|canvaskit)/(.*)",
 
-      "headers": \[{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }\]
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
 
     }
 
-  \]
+  ]
 
 }
 
-A Vercel serve arquivos existentes antes de aplicar `rewrites`, então `/projetos/projeto-a/index.html` gerado pelo script é entregue diretamente; rotas desconhecidas caem no `index.html` e o `go_router` mostra a página 404\.
+A Vercel serve arquivos existentes antes de aplicar `rewrites`, então `/projetos/projeto-a/index.html` gerado pelo script é entregue diretamente; rotas desconhecidas caem no `index.html` e o `go_router` mostra a página 404.
 
-\# .github/workflows/deploy.yml
+```yaml
+# .github/workflows/deploy.yml
 
 name: Deploy
 
@@ -707,7 +716,7 @@ on:
 
   push:
 
-    branches: \[main\]
+    branches: [main]
 
 jobs:
 
@@ -717,33 +726,34 @@ jobs:
 
     steps:
 
-      \- uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      \- uses: subosito/flutter-action@v2
+      - uses: subosito/flutter-action@v2
 
         with: { channel: stable, cache: true }
 
-      \- run: flutter pub get
+      - run: flutter pub get
 
-      \- run: flutter test
+      - run: flutter test
 
-      \- run: flutter build web \--wasm \--release
+      - run: flutter build web --wasm --release
 
-      \- run: dart run tool/build\_seo.dart \--base-url=https\://jeandevbr.vercel.app
+      - run: dart run tool/build_seo.dart --base-url=https://jeandevbr.vercel.app
 
-      \- run: cp vercel.json build/web/
+      - run: cp vercel.json build/web/
 
-      \- run: npx vercel deploy build/web \--prod \--yes \--token=\${{ secrets.VERCEL\_TOKEN }}
+      - run: npx vercel deploy build/web --prod --yes --token=${{ secrets.VERCEL_TOKEN }}
 
         env:
 
-          VERCEL\_ORG\_ID: \${{ secrets.VERCEL\_ORG\_ID }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
 
-          VERCEL\_PROJECT\_ID: \${{ secrets.VERCEL\_PROJECT\_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+```
 
 ---
 
-## 15\. Analytics
+## 15. Analytics
 
 Poucos eventos que respondem perguntas reais (Plausible, Umami ou Vercel Analytics):
 
@@ -753,13 +763,13 @@ Chamada via `dart:js_interop` para a função global do provedor.
 
 ---
 
-## 16\. Roadmap
+## 16. Roadmap
 
 | Ordem | Entrega | Esforço | Impacto |
 | :---- | :---- | :---- | :---- |
 | P0 | Inventariar projetos e selecionar os melhores cases front-end | Médio | Muito alto |
 | P0 | Escrever conteúdo e JSON de cada case (3 primeiro) | Alto | Muito alto |
-| P0 | `usePathUrlStrategy` \+ `go_router` com rotas individuais | Baixo | Muito alto |
+| P0 | `usePathUrlStrategy` + `go_router` com rotas individuais | Baixo | Muito alto |
 | P0 | Camada SEO estática (`tool/build_seo.dart`) | Médio | Muito alto |
 | P0 | Home com nova narrativa e hero | Médio | Muito alto |
 | P0 | Página de projeto individual | Alto | Muito alto |
@@ -780,60 +790,60 @@ Chamada via `dart:js_interop` para a função global do provedor.
 
 ---
 
-## 17\. Checklist de QA
+## 17. Checklist de QA
 
 **Conteúdo**
 
-- [ ] Todo projeto principal demonstra qualidade de interface (responsividade, acessibilidade, performance)  
-- [ ] "Meu papel" diferenciado do trabalho da equipe  
-- [ ] Métricas só quando sustentáveis; badges só de tecnologias com papel real  
+- [ ] Todo projeto principal demonstra qualidade de interface (responsividade, acessibilidade, performance)
+- [ ] "Meu papel" diferenciado do trabalho da equipe
+- [ ] Métricas só quando sustentáveis; badges só de tecnologias com papel real
 - [ ] Cases privados com nota de confidencialidade; nenhum dado sensível em capturas
 
 **Navegação**
 
-- [ ] Cada projeto tem URL própria, sem `#`  
-- [ ] Recarregar `/projetos/<slug>` funciona (sem 404 da Vercel)  
-- [ ] Back/forward do navegador funcionam  
+- [ ] Cada projeto tem URL própria, sem `#`
+- [ ] Recarregar `/projetos/<slug>` funciona (sem 404 da Vercel)
+- [ ] Back/forward do navegador funcionam
 - [ ] Nenhum CTA é botão morto; links abrem em nova aba com botão do meio
 
 **Responsividade**
 
-- [ ] Testado em 320 / 360 / 390 / 768 / 1024 / 1280 / 1440 px  
-- [ ] Sem overflow horizontal; cards em uma coluna no mobile  
+- [ ] Testado em 320 / 360 / 390 / 768 / 1024 / 1280 / 1440 px
+- [ ] Sem overflow horizontal; cards em uma coluna no mobile
 - [ ] Diagramas legíveis no mobile; menu ok em portrait e landscape
 
 **Acessibilidade**
 
-- [ ] Um H1 por página e headings coerentes  
-- [ ] Navegação completa por teclado, foco sempre visível, skip link  
-- [ ] Dialog gerencia foco; `Esc` fecha  
-- [ ] Estado não comunicado só por cor; animações reduzidas respeitadas  
-- [ ] Texto a 200% não quebra o uso  
+- [ ] Um H1 por página e headings coerentes
+- [ ] Navegação completa por teclado, foco sempre visível, skip link
+- [ ] Dialog gerencia foco; `Esc` fecha
+- [ ] Estado não comunicado só por cor; animações reduzidas respeitadas
+- [ ] Texto a 200% não quebra o uso
 - [ ] Testado com leitor de tela (NVDA ou VoiceOver)
 
 **Performance**
 
-- [ ] LCP ≤ 2,5 s · INP \< 200 ms · CLS \< 0,1  
+- [ ] LCP ≤ 2,5 s · INP < 200 ms · CLS < 0,1
 - [ ] Vídeos abaixo da dobra não carregam player no primeiro paint
 
 **SEO**
 
-- [ ] `curl` em cada rota retorna title, description e H1 corretos  
-- [ ] Title e description únicos por página; canonical correto  
-- [ ] Open Graph validado (LinkedIn Post Inspector)  
-- [ ] `sitemap.xml` com todas as rotas públicas; `robots.txt` não bloqueia conteúdo  
-- [ ] Structured data corresponde ao conteúdo visível (Rich Results Test)  
+- [ ] `curl` em cada rota retorna title, description e H1 corretos
+- [ ] Title e description únicos por página; canonical correto
+- [ ] Open Graph validado (LinkedIn Post Inspector)
+- [ ] `sitemap.xml` com todas as rotas públicas; `robots.txt` não bloqueia conteúdo
+- [ ] Structured data corresponde ao conteúdo visível (Rich Results Test)
 - [ ] Página 404 funciona
 
 ---
 
 ## Referências
 
-- Google Search Central — [Core Web Vitals](https://developers.google.com/search/docs/appearance/core-web-vitals), [títulos](https://developers.google.com/search/docs/appearance/title-link), [snippets](https://developers.google.com/search/docs/appearance/snippet), [structured data](https://developers.google.com/search/docs/appearance/structured-data/intro-structured-data)  
-- [WCAG 2.2](https://www.w3.org/WAI/standards-guidelines/wcag/new-in-22/) · [W3C Brasil — Cartilhas](https://www.w3c.br/web-para-todos/cartilhas-de-acessibilidade-na-web/) · [eMAG](https://emag.governoeletronico.gov.br/)  
-- Nielsen Norman Group — [Layer-Cake Pattern](https://www.nngroup.com/articles/layer-cake-pattern-scanning/), [Principles of Visual Design](https://www.nngroup.com/articles/principles-visual-design/)  
-- Flutter — [Web renderers](https://docs.flutter.dev/platform-integration/web/renderers), [URL strategy](https://docs.flutter.dev/ui/navigation/url-strategies), [Accessibility](https://docs.flutter.dev/ui/accessibility-and-internationalization/accessibility)  
-- Portfólios de referência: [Lee Robinson](https://leerob.com/) (clareza) · [Josh W. Comeau](https://www.joshwcomeau.com/) (profundidade \+ personalidade) · [Brittany Chiang](https://brittanychiang.com/) (organização)
+- Google Search Central — [Core Web Vitals](https://developers.google.com/search/docs/appearance/core-web-vitals), [títulos](https://developers.google.com/search/docs/appearance/title-link), [snippets](https://developers.google.com/search/docs/appearance/snippet), [structured data](https://developers.google.com/search/docs/appearance/structured-data/intro-structured-data)
+- [WCAG 2.2](https://www.w3.org/WAI/standards-guidelines/wcag/new-in-22/) · [W3C Brasil — Cartilhas](https://www.w3c.br/web-para-todos/cartilhas-de-acessibilidade-na-web/) · [eMAG](https://emag.governoeletronico.gov.br/)
+- Nielsen Norman Group — [Layer-Cake Pattern](https://www.nngroup.com/articles/layer-cake-pattern-scanning/), [Principles of Visual Design](https://www.nngroup.com/articles/principles-visual-design/)
+- Flutter — [Web renderers](https://docs.flutter.dev/platform-integration/web/renderers), [URL strategy](https://docs.flutter.dev/ui/navigation/url-strategies), [Accessibility](https://docs.flutter.dev/ui/accessibility-and-internationalization/accessibility)
+- Portfólios de referência: [Lee Robinson](https://leerob.com/) (clareza) · [Josh W. Comeau](https://www.joshwcomeau.com/) (profundidade + personalidade) · [Brittany Chiang](https://brittanychiang.com/) (organização)
 
 ---
 
