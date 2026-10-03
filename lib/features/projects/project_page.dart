@@ -65,9 +65,11 @@ class ProjectPage extends StatelessWidget {
                         ],
                         Text(
                           project.title,
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: PortfolioColors.text,
-                            fontSize: 46,
+                            fontSize: MediaQuery.sizeOf(context).width < 600
+                                ? 36
+                                : 46,
                             height: 1.15,
                             fontWeight: FontWeight.w800,
                             letterSpacing: -1.5,
@@ -85,15 +87,58 @@ class ProjectPage extends StatelessWidget {
                             ),
                           ),
                         ),
+                        if (project.longDescription case final description?) ...[
+                          const SizedBox(height: 38),
+                          _ProjectDescriptionSection(
+                            title: 'Sobre o projeto',
+                            description: description,
+                          ),
+                        ],
+                        if (project.technicalDescription
+                            case final description?) ...[
+                          const SizedBox(height: 28),
+                          _ProjectDescriptionSection(
+                            title: 'Detalhes técnicos',
+                            description: description,
+                          ),
+                        ],
                         const SizedBox(height: 28),
-                        Wrap(
-                          spacing: 10,
-                          runSpacing: 10,
-                          children: [
-                            for (final tech in project.technologies)
-                              _TechnologyBadge(label: tech),
-                          ],
-                        ),
+                        if (project.stackGroups.isEmpty)
+                          Wrap(
+                            spacing: 10,
+                            runSpacing: 10,
+                            children: [
+                              for (final tech in project.technologies)
+                                _TechnologyBadge(label: tech),
+                            ],
+                          )
+                        else
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              for (final group in project.stackGroups) ...[
+                                Text(
+                                  group.title,
+                                  style: const TextStyle(
+                                    color: PortfolioColors.text,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                                const SizedBox(height: 10),
+                                Wrap(
+                                  spacing: 10,
+                                  runSpacing: 10,
+                                  children: [
+                                    for (final tech in group.technologies)
+                                      _TechnologyBadge(label: tech),
+                                  ],
+                                ),
+                                if (group != project.stackGroups.last)
+                                  const SizedBox(height: 18),
+                              ],
+                            ],
+                          ),
                         const SizedBox(height: 36),
                         Wrap(
                           spacing: 12,
@@ -176,6 +221,43 @@ class ProjectPage extends StatelessWidget {
       ),
     );
   }
+}
+
+class _ProjectDescriptionSection extends StatelessWidget {
+  const _ProjectDescriptionSection({
+    required this.title,
+    required this.description,
+  });
+
+  final String title;
+  final String description;
+
+  @override
+  Widget build(BuildContext context) => ConstrainedBox(
+    constraints: const BoxConstraints(maxWidth: 780),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: const TextStyle(
+            color: PortfolioColors.text,
+            fontSize: 22,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Text(
+          description,
+          style: const TextStyle(
+            color: PortfolioColors.muted,
+            fontSize: 15,
+            height: 1.75,
+          ),
+        ),
+      ],
+    ),
+  );
 }
 
 class _ProjectHeader extends StatelessWidget {
