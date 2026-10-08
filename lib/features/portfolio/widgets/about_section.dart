@@ -38,7 +38,7 @@ class AboutSection extends StatelessWidget {
               spacing: 12,
               runSpacing: 12,
               children: [
-                _StatCard(value: '1+', label: 'ano estudando e criando'),
+                _StatCard(value: '2+', label: 'anos de experiência'),
                 _StatCard(value: '30+', label: 'projetos concluídos'),
               ],
             ),
