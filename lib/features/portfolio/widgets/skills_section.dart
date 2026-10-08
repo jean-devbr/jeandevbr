@@ -8,17 +8,17 @@ class SkillsSection extends StatelessWidget {
 
   static const groups = <(String, IconData, List<String>)>[
     (
-      'Aplicações',
+      'Front-end',
       Icons.devices_rounded,
-      ['Flutter', 'Dart', 'React', 'TypeScript'],
+      ['Dart/Flutter', 'Vue3', 'React', 'TypeScript', 'Tailwind', 'HTML/CSS'],
     ),
     (
-      'Backend e APIs',
+      'Backend && APIs',
       Icons.account_tree_outlined,
       ['Java', 'Spring Boot', 'Python', 'FastAPI', 'REST'],
     ),
     (
-      'Dados',
+      'Banco de Dados',
       Icons.storage_rounded,
       ['PostgreSQL', 'MySQL', 'SQLite', 'Supabase'],
     ),
