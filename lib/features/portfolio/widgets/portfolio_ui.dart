@@ -282,12 +282,16 @@ class PortfolioWhatsAppButton extends StatelessWidget {
   Widget build(BuildContext context) => FloatingActionButton(
     onPressed: onPressed,
     tooltip: 'Conversar pelo WhatsApp',
-    backgroundColor: const Color(0xFF20C773),
+    backgroundColor: const Color(0xFF25D366),
     foregroundColor: Colors.white,
+    shape: const CircleBorder(),
+    elevation: 6,
     child: Image.asset(
       'assets/images/whatsapp.webp',
-      width: 35,
-      height: 35,
+      width: 52,
+      height: 52,
+      color: Colors.white,
+      colorBlendMode: BlendMode.srcIn,
       errorBuilder: (context, error, stackTrace) =>
           const Icon(Icons.chat_rounded),
     ),
