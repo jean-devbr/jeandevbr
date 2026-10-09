@@ -159,51 +159,6 @@ class ProjectPage extends StatelessWidget {
                               ),
                           ],
                         ),
-                        const SizedBox(height: 54),
-                        Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.all(30),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(24),
-                            border: Border.all(color: PortfolioColors.border),
-                            gradient: const LinearGradient(
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                              colors: [
-                                Color(0xFF14283A),
-                                Color(0xFF131725),
-                                PortfolioColors.surface,
-                              ],
-                            ),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Icon(
-                                Icons.layers_outlined,
-                                size: 34,
-                                color: PortfolioColors.cyan,
-                              ),
-                              const SizedBox(height: 24),
-                              Text(
-                                project.title,
-                                style: const TextStyle(
-                                  color: PortfolioColors.text,
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 24,
-                                ),
-                              ),
-                              const SizedBox(height: 12),
-                              Text(
-                                'Este projeto explora ${project.technologies.join(', ')} em uma interface pensada para ser clara e fácil de usar.',
-                                style: const TextStyle(
-                                  color: PortfolioColors.muted,
-                                  height: 1.7,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
                         const SizedBox(height: 38),
                         OutlinedButton.icon(
                           onPressed: () => context.go('/'),
