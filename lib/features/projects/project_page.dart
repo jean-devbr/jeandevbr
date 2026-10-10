@@ -42,10 +42,21 @@ class ProjectPage extends StatelessWidget {
                             borderRadius: BorderRadius.circular(18),
                             child: AspectRatio(
                               aspectRatio: 16 / 7,
-                              child: Image.asset(
-                                imagePath,
-                                width: double.infinity,
-                                fit: BoxFit.cover,
+                              child: MouseRegion(
+                                cursor: project.demoUrl == null
+                                    ? MouseCursor.defer
+                                    : SystemMouseCursors.click,
+                                child: GestureDetector(
+                                  onTap: switch (project.demoUrl) {
+                                    final demo? => () => _openUrl(demo),
+                                    null => null,
+                                  },
+                                  child: Image.asset(
+                                    imagePath,
+                                    width: double.infinity,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
