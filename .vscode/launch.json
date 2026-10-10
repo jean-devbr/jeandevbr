@@ -8,6 +8,7 @@
       "program": "lib/main.dart",
       "deviceId": "web-server",
       "flutterMode": "debug",
+      "postDebugTask": "Parar Flutter Web",
       "toolArgs": [
         "--web-hostname",
         "0.0.0.0",

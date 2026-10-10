@@ -1,0 +1,16 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Parar Flutter Web",
+      "type": "shell",
+      "command": "pkill -f '[f]lutter_tools.snapshot run .*-d web-server' || true",
+      "presentation": {
+        "reveal": "never",
+        "panel": "dedicated",
+        "close": true
+      },
+      "problemMatcher": []
+    }
+  ]
+}
