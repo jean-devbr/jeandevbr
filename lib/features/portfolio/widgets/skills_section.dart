@@ -13,7 +13,7 @@ class SkillsSection extends StatelessWidget {
       ['Dart/Flutter', 'Vue3', 'React', 'TypeScript', 'Tailwind', 'HTML/CSS'],
     ),
     (
-      'Backend && APIs',
+      'Back-end & APIs',
       Icons.account_tree_outlined,
       ['Java', 'Spring Boot', 'Python', 'FastAPI', 'REST'],
     ),
@@ -50,22 +50,35 @@ class SkillsSection extends StatelessWidget {
                 : constraints.maxWidth >= 560
                 ? 2
                 : 1;
-            final gap = 15.0;
-            final width =
-                (constraints.maxWidth - gap * (columns - 1)) / columns;
-            return Wrap(
-              spacing: gap,
-              runSpacing: gap,
+            const gap = 16.0;
+            return Column(
               children: [
-                for (final group in groups)
-                  SizedBox(
-                    width: width,
-                    child: _SkillCard(
-                      title: group.$1,
-                      icon: group.$2,
-                      skills: group.$3,
+                for (
+                  var start = 0;
+                  start < groups.length;
+                  start += columns
+                ) ...[
+                  if (start > 0) const SizedBox(height: gap),
+                  IntrinsicHeight(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        for (var i = start; i < start + columns; i++) ...[
+                          if (i > start) const SizedBox(width: gap),
+                          Expanded(
+                            child: i < groups.length
+                                ? _SkillCard(
+                                    title: groups[i].$1,
+                                    icon: groups[i].$2,
+                                    skills: groups[i].$3,
+                                  )
+                                : const SizedBox.shrink(),
+                          ),
+                        ],
+                      ],
                     ),
                   ),
+                ],
               ],
             );
           },
@@ -88,7 +101,7 @@ class _SkillCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-    padding: const EdgeInsets.all(21),
+    padding: const EdgeInsets.all(22),
     decoration: BoxDecoration(
       color: PortfolioColors.surface,
       borderRadius: BorderRadius.circular(18),
@@ -97,19 +110,38 @@ class _SkillCard extends StatelessWidget {
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(icon, color: PortfolioColors.cyan, size: 25),
-        const SizedBox(height: 16),
-        Text(
-          title,
-          style: const TextStyle(
-            color: PortfolioColors.text,
-            fontWeight: FontWeight.w700,
-            fontSize: 16,
-          ),
+        Row(
+          children: [
+            Container(
+              width: 42,
+              height: 42,
+              decoration: BoxDecoration(
+                color: PortfolioColors.cyan.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: PortfolioColors.cyan.withValues(alpha: 0.18),
+                ),
+              ),
+              child: Icon(icon, color: PortfolioColors.cyan, size: 22),
+            ),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Text(
+                title,
+                style: const TextStyle(
+                  color: PortfolioColors.text,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 16,
+                ),
+              ),
+            ),
+          ],
         ),
-        const SizedBox(height: 14),
+        const SizedBox(height: 18),
+        Container(height: 1, color: PortfolioColors.border),
+        const SizedBox(height: 18),
         Wrap(
-          spacing: 7,
+          spacing: 8,
           runSpacing: 8,
           children: [
             for (final skill in skills) PortfolioTechPill(label: skill),

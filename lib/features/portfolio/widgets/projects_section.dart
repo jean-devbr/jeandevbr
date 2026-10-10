@@ -19,7 +19,7 @@ class ProjectsSection extends StatelessWidget {
         const PortfolioSectionTitle(first: 'Projetos em ', accent: 'destaque'),
         const SizedBox(height: 14),
         const Text(
-          'Uma seleção de projetos pessoais e estudos práticos.',
+          'Aplicações reais, no ar e usadas por clientes.',
           textAlign: TextAlign.center,
           style: TextStyle(color: PortfolioColors.muted, fontSize: 16),
         ),

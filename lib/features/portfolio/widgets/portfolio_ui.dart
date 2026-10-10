@@ -162,7 +162,7 @@ class PortfolioTechPill extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-    padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
+    padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 6),
     decoration: BoxDecoration(
       color: PortfolioColors.cyan.withValues(alpha: 0.08),
       borderRadius: BorderRadius.circular(8),
@@ -172,7 +172,7 @@ class PortfolioTechPill extends StatelessWidget {
       label,
       style: const TextStyle(
         color: PortfolioColors.cyan,
-        fontSize: 10,
+        fontSize: 12,
         fontWeight: FontWeight.w600,
       ),
     ),
