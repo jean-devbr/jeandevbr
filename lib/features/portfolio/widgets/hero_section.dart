@@ -71,15 +71,21 @@ class HeroSection extends StatelessWidget {
                   icon: Icons.arrow_downward_rounded,
                   onPressed: onProjects,
                 ),
-                PortfolioSocialButton(
-                  label: 'GitHub',
-                  icon: Icons.code_rounded,
-                  url: 'https://github.com/jean-devbr',
-                ),
-                PortfolioSocialButton(
-                  label: 'LinkedIn',
-                  icon: Icons.work_outline_rounded,
-                  url: 'https://www.linkedin.com/in/jean-costa-0040962b8/',
+                const Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    PortfolioSocialButton(
+                      label: 'GitHub',
+                      icon: Icons.code_rounded,
+                      url: 'https://github.com/jean-devbr',
+                    ),
+                    SizedBox(width: 12),
+                    PortfolioSocialButton(
+                      label: 'LinkedIn',
+                      icon: Icons.work_outline_rounded,
+                      url: 'https://www.linkedin.com/in/jean-costa-0040962b8/',
+                    ),
+                  ],
                 ),
               ],
             ),
