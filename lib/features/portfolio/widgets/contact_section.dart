@@ -58,27 +58,27 @@ class ContactSection extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _ContactLink(
-                icon: Icons.email_outlined,
+                icon: const Icon(Icons.email_outlined),
                 label: 'E-mail',
                 value: 'costajean1005@gmail.com',
                 url: 'mailto:costajean1005@gmail.com',
               ),
               const SizedBox(height: 15),
               _ContactLink(
-                icon: Icons.phone_outlined,
+                icon: const Icon(Icons.phone_outlined),
                 label: 'WhatsApp',
                 value: '+55 21 98936-5166',
                 url: 'https://wa.me/5521989365166',
               ),
               const SizedBox(height: 15),
               _ContactLink(
-                icon: Icons.location_on_outlined,
+                icon: const Icon(Icons.location_on_outlined),
                 label: 'Localização',
                 value: 'Rio de Janeiro, Brasil',
               ),
               const SizedBox(height: 15),
               _ContactLink(
-                icon: Icons.link_rounded,
+                icon: const PortfolioBrandLogo(PortfolioBrand.linkedin),
                 label: 'LinkedIn',
                 value: 'linkedin.com/in/jean-costa',
                 url: 'https://www.linkedin.com/in/jean-costa-0040962b8/',
@@ -113,7 +113,7 @@ class _ContactLink extends StatelessWidget {
     this.url,
   });
 
-  final IconData icon;
+  final Widget icon;
   final String label;
   final String value;
   final String? url;
@@ -131,7 +131,12 @@ class _ContactLink extends StatelessWidget {
             color: PortfolioColors.cyan.withValues(alpha: 0.09),
             borderRadius: BorderRadius.circular(12),
           ),
-          child: Icon(icon, size: 20, color: PortfolioColors.cyan),
+          child: Center(
+            child: IconTheme.merge(
+              data: const IconThemeData(size: 20, color: PortfolioColors.cyan),
+              child: icon,
+            ),
+          ),
         ),
         const SizedBox(width: 12),
         Expanded(

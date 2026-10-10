@@ -28,17 +28,17 @@ class PortfolioFooter extends StatelessWidget {
               spacing: 12,
               children: [
                 PortfolioSocialIcon(
-                  icon: Icons.code_rounded,
+                  brand: PortfolioBrand.github,
                   label: 'GitHub',
                   url: 'https://github.com/jean-devbr',
                 ),
                 PortfolioSocialIcon(
-                  icon: Icons.work_outline_rounded,
+                  brand: PortfolioBrand.linkedin,
                   label: 'LinkedIn',
                   url: 'https://www.linkedin.com/in/jean-costa-0040962b8/',
                 ),
                 PortfolioSocialIcon(
-                  icon: Icons.camera_alt_outlined,
+                  brand: PortfolioBrand.instagram,
                   label: 'Instagram',
                   url: 'https://www.instagram.com/jeanooficial12/',
                 ),

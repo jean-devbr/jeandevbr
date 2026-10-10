@@ -76,13 +76,13 @@ class HeroSection extends StatelessWidget {
                   children: [
                     PortfolioSocialButton(
                       label: 'GitHub',
-                      icon: Icons.code_rounded,
+                      brand: PortfolioBrand.github,
                       url: 'https://github.com/jean-devbr',
                     ),
                     SizedBox(width: 12),
                     PortfolioSocialButton(
                       label: 'LinkedIn',
-                      icon: Icons.work_outline_rounded,
+                      brand: PortfolioBrand.linkedin,
                       url: 'https://www.linkedin.com/in/jean-costa-0040962b8/',
                     ),
                   ],

@@ -228,22 +228,58 @@ class PortfolioOutlineButton extends StatelessWidget {
   );
 }
 
+enum PortfolioBrand { github, linkedin, instagram }
+
+class PortfolioBrandLogo extends StatelessWidget {
+  const PortfolioBrandLogo(this.brand, {super.key, this.size = 20});
+
+  final PortfolioBrand brand;
+  final double size;
+
+  @override
+  Widget build(BuildContext context) => switch (brand) {
+    PortfolioBrand.github => Image.asset(
+      'assets/images/Github.png',
+      width: size,
+      height: size,
+      color: PortfolioColors.text,
+      colorBlendMode: BlendMode.srcIn,
+    ),
+    PortfolioBrand.linkedin => Image.asset(
+      'assets/images/linkedin.png',
+      width: size,
+      height: size,
+    ),
+    // O PNG não tem transparência: amplia e recorta para esconder o fundo.
+    PortfolioBrand.instagram => ClipRRect(
+      borderRadius: BorderRadius.circular(size * 0.22),
+      child: SizedBox.square(
+        dimension: size,
+        child: Transform.scale(
+          scale: 1.45,
+          child: Image.asset('assets/images/instagram.png', fit: BoxFit.cover),
+        ),
+      ),
+    ),
+  };
+}
+
 class PortfolioSocialButton extends StatelessWidget {
   const PortfolioSocialButton({
     super.key,
     required this.label,
-    required this.icon,
+    required this.brand,
     required this.url,
   });
 
   final String label;
-  final IconData icon;
+  final PortfolioBrand brand;
   final String url;
 
   @override
   Widget build(BuildContext context) => OutlinedButton.icon(
     onPressed: () => openPortfolioUrl(url),
-    icon: Icon(icon, size: 17),
+    icon: PortfolioBrandLogo(brand, size: 18),
     label: Text(label),
     style: OutlinedButton.styleFrom(
       foregroundColor: PortfolioColors.text,
@@ -256,12 +292,12 @@ class PortfolioSocialButton extends StatelessWidget {
 class PortfolioSocialIcon extends StatelessWidget {
   const PortfolioSocialIcon({
     super.key,
-    required this.icon,
+    required this.brand,
     required this.label,
     required this.url,
   });
 
-  final IconData icon;
+  final PortfolioBrand brand;
   final String label;
   final String url;
 
@@ -269,7 +305,7 @@ class PortfolioSocialIcon extends StatelessWidget {
   Widget build(BuildContext context) => IconButton(
     tooltip: label,
     onPressed: () => openPortfolioUrl(url),
-    icon: Icon(icon, color: PortfolioColors.muted, size: 19),
+    icon: PortfolioBrandLogo(brand),
   );
 }
 
