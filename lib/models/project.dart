@@ -65,6 +65,51 @@ class PortfolioProject {
       category: '',
       icon: '01',
     ),
+    PortfolioProject(
+      slug: 'redragon-battery-monitor',
+      title: 'Redragon Battery Monitor',
+      description:
+          'App para Linux que mostra o nível real da bateria do mouse Redragon M719RGB-PRO no Ubuntu, com ícone na barra superior e aviso de bateria baixa.',
+      technologies: [
+        'Python',
+        'PySide6 (Qt)',
+        'Linux',
+        'Ubuntu',
+        'HID/hidraw',
+        'USB',
+        'Engenharia reversa',
+        'Shell Script',
+        'pytest',
+      ],
+      stackGroups: [
+        ProjectStackGroup(
+          title: 'Aplicativo desktop',
+          technologies: ['Python', 'PySide6 (Qt)'],
+        ),
+        ProjectStackGroup(
+          title: 'Hardware e sistema',
+          technologies: [
+            'Linux',
+            'Ubuntu',
+            'HID/hidraw',
+            'USB',
+            'Engenharia reversa',
+          ],
+        ),
+        ProjectStackGroup(
+          title: 'Instalação e testes',
+          technologies: ['Shell Script', 'pytest'],
+        ),
+      ],
+      longDescription:
+          'O Ubuntu não mostra a bateria do mouse Redragon M719RGB-PRO porque ele não usa o padrão HID de bateria e não tem driver no kernel. Investiguei os descritores HID e descobri que o firmware responde a um comando proprietário do protocolo Compx (relatório 0x08). Com isso, ele informa a porcentagem, se está carregando e a tensão. Com base nisso, criei um app desktop em Python + PySide6 que lê esses dados pelo hidraw, tanto pelo receptor 2.4 GHz quanto pelo cabo USB-C.',
+      technicalDescription:
+          'O app mostra a porcentagem real informada pelo próprio mouse, com ícone na barra superior que indica quando está carregando e aviso de bateria baixa. Funciona pelo receptor 2.4 GHz e pelo cabo USB-C, tem opção de iniciar com o sistema, interface em português e inglês, aviso de nova versão com atualização pelo próprio app e também um modo de terminal (CLI). A instalação é feita com um único comando:\n\ncurl -fsSL https://raw.githubusercontent.com/jean-devbr/redragon-battery-monitor/main/get.sh | bash\n\nCódigo aberto sob a licença MIT.',
+      githubUrl: 'https://github.com/jean-devbr/redragon-battery-monitor',
+      imagePath: 'assets/content/projects/redragon-battery-monitor.png',
+      category: '',
+      icon: '02',
+    ),
   ];
 }
 
